@@ -17,9 +17,9 @@ import {
 export default function NavBar(props) {
     return (
         <Header style={styles.container}>
-            <StatusBar backgroundColor={styles.container.backgroundColor}/>
+            <StatusBar/>
             <Left>
-                <Button transparent>
+                <Button transparent onPress={props.toggleMenu()}>
                     <Icon name="menu" />
                 </Button>
             </Left>
@@ -34,6 +34,7 @@ export default function NavBar(props) {
 
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: '#3F75B5',
+    //   backgroundColor: '#3F75B5',
+      height: 50,
     },
   });
