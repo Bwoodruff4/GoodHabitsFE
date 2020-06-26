@@ -19,7 +19,7 @@ export default function NavBar(props) {
         <Header style={styles.container}>
             <StatusBar/>
             <Left>
-                <Button transparent onPress={props.toggleMenu()}>
+                <Button transparent>
                     <Icon name="menu" />
                 </Button>
             </Left>
