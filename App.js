@@ -16,6 +16,7 @@ import NavBar from './Components/NavBar'
 import MainTabScreen from './screens/MainTabScreen'
 import HomeStackScreen from './screens/HomeStackScreen'
 import ProfileStackScreen from './screens/ProfileStackScreen'
+import RootStackScreen from './screens/RootStackScreen'
 
 // import { FontDisplay } from 'expo-font';
 
@@ -29,10 +30,11 @@ export default function App() {
   return (
     <StyleProvider style={getTheme(material)}>
         <NavigationContainer>
-          <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />} >
+          <RootStackScreen/>
+          {/* <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />} >
             <Drawer.Screen name="Home" component={HomeStackScreen} gobalStyle={getTheme(material)}/>
             <Drawer.Screen name="Profile" component={ProfileStackScreen} gobalStyle={getTheme(material)}/>
-          </Drawer.Navigator>
+          </Drawer.Navigator> */}
         </NavigationContainer>
     </StyleProvider> 
   );
