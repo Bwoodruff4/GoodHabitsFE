@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useContext} from 'react'
 import { StyleSheet, View, TextInput } from 'react-native';
 import {
     Content,
@@ -9,13 +9,15 @@ import {
     Button,
     Text,
     Icon,
-  } from "native-base";
+} from "native-base";
 
-const loginURL = `http://10.0.2.2:3000/login`
+import { AuthContext } from '../Components/context'  
 
 export default function SignInScreen() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
+    const { signIn } = useContext(AuthContext)
 
     const handleUsernameChange = (val) => {
         setUsername(val)
@@ -25,21 +27,9 @@ export default function SignInScreen() {
     }
 
     const login = () => {
-        fetch(loginURL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                user: {
-                    username: username,
-                    password: password,
-                }
-            })
-        })
-        .then(response => response.json())
-        .then(response => console.log(response))
+        signIn(username, password)
     }
+
     return (
         
         <View style={styles.container}>
