@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {View, Text, StyleSheet } from "react-native"
 import {
     DrawerContentScrollView,
@@ -8,8 +8,12 @@ import {
     Button,
     Icon,
 } from 'native-base'
+import { AuthContext } from '../Components/context'
 
 export function DrawerContent(props) {
+
+    const { signOut } = useContext(AuthContext)
+
     return (
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -23,8 +27,23 @@ export function DrawerContent(props) {
                     onPress={() => {props.navigation.navigate('Home')}}
                 />
                 <DrawerItem 
+                    icon={() => (
+                        <Icon 
+                        name="person" 
+                        />
+                    )}
                     label="Profile"
                     onPress={() => {props.navigation.navigate('Profile')}}
+                >
+                </DrawerItem>
+                <DrawerItem 
+                    icon={() => (
+                        <Icon 
+                        name="journal" 
+                        />
+                    )}
+                    label="Habits"
+                    onPress={() => {props.navigation.navigate('Habits')}}
                 >
                 </DrawerItem>
             </DrawerContentScrollView>
@@ -36,29 +55,9 @@ export function DrawerContent(props) {
                         />
                     )}
                     label="Sign Out"
-                    onPress={() => {}}
+                    onPress={() => {signOut()}}
                 />
             </View>
-            {/* <DrawerContentScrollView {...props}>
-                <View>
-                    <View>
-                        <Text>Hello</Text>
-                    </View>
-                </View>
-                <Drawer.Section>
-                    <DrawerItem
-                        label="Home"
-                    />
-                    <DrawerItem
-                        label="Profile"
-                    />
-                </Drawer.Section>
-            </DrawerContentScrollView>
-            <Drawer.Section>
-                <DrawerItem
-                    label="Bottom"
-                />
-            </Drawer.Section> */}
         </View>
     )
 }
