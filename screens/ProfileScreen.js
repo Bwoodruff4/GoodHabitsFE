@@ -4,13 +4,19 @@ import {
     Button,
     Container,
     Text,
+    Icon,
 } from "native-base";
 
-export default function ProfileScreen() {
+export default function ProfileScreen({navigation}) {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button style={styles.button}>
+        <View style={styles.container}>
+            <Button block info rounded style={styles.button} onPress={() => navigation.navigate('NewHabitScreen')}>
+                <Icon right name='add' />
                 <Text>Add New Habit</Text>
+            </Button>
+            <Button block info rounded style={styles.button}>
+                <Icon left name='trash' />
+                <Text>Delete Habit</Text>
             </Button>
         </View>
     )
@@ -20,15 +26,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        justifyContent: 'center'
-    },
-    loginContainer: {
-        height: 150,
-        backgroundColor: '#fff',
-        // alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
     },
     button: {
-        margin: 10
+        margin: 5,
+        justifyContent: 'center',
     }
 })

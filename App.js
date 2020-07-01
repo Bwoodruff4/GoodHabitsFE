@@ -17,7 +17,8 @@ import MainTabScreen from './screens/MainTabScreen'
 import HomeStackScreen from './screens/HomeStackScreen'
 import ProfileStackScreen from './screens/ProfileStackScreen'
 import RootStackScreen from './screens/RootStackScreen'
-
+import HabitsStackScreen from './screens/HabitsStackScreen'
+import NewHabitScreen from './screens/NewHabitScreen'
 import { AuthContext } from './Components/context'
 import { isLoading } from 'expo-font';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -153,6 +154,8 @@ export default function App() {
             <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />} >
               <Drawer.Screen name="Home" component={HomeStackScreen} gobalStyle={getTheme(material)}/>
               <Drawer.Screen name="Profile" component={ProfileStackScreen} gobalStyle={getTheme(material)}/>
+              <Drawer.Screen name="Habits" component={HabitsStackScreen} gobalStyle={getTheme(material)}/>
+              <Drawer.Screen name="NewHabitScreen" component={NewHabitScreen} gobalStyle={getTheme(material)}/>
             </Drawer.Navigator> 
           )
           :

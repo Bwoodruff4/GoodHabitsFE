@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack'
-import HabitsScreen from './HabitScreen'
+import HabitsScreen from './HabitsScreen'
 import {
     Button,
     Icon,
@@ -23,7 +23,7 @@ const HabitsStackScreen = ({navigation}) => (
             options={{
                 headerLeft: () => (
                     <Button transparent light>
-                        <Icon name="menu" style={{color:'white'}}  onPress={() => navigation.toggleDrawer()}/>
+                        <Icon name="menu" style={{color:'white'}} onPress={() => navigation.toggleDrawer()}/>
                     </Button>
                 )
             }}

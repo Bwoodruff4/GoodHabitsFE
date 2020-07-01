@@ -11,14 +11,12 @@ import {
     Icon,
   } from "native-base";
 
-const userURL = `http://10.0.2.2:3000/users`
+const habitURL = `http://10.0.2.2:3000/habits`
 
-export default function SignUpScreen({navigation}) {
-    const [email, setEmail] = useState('')
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [passwordConfirmed, setPasswordConfirmed] = useState('')
-
+export default function NewHabitScreen({navigation}) {
+    const [title, setTitle] = useState('')
+    const [dayCount, setDayCount] = useState(0)
+    
     const handleEmailChange = (val) => {
         setEmail(val)
     }
