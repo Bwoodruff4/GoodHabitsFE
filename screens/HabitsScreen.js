@@ -19,41 +19,49 @@ import {
 export default function HabitsScreen() {
     const [selectedValue, setSelectedValue] = useState(undefined)
     const [trackerSheet, setTrackerSheet] = useState([
-        {day: 'Day 1', id: '1'},
-        {day: 'Day 2', id: '2'},
-        {day: 'Day 3', id: '3'},
-        {day: 'Day 4', id: '4'},
-        {day: 'Day 5', id: '5'},
-        {day: 'Day 6', id: '6'},
-        {day: 'Day 7', id: '7'},
-        {day: 'Day 8', id: '8'},
-        {day: 'Day 9', id: '9'},
-        {day: 'Day 10', id: '10'},
-        {day: 'Day 11', id: '11'},
-        {day: 'Day 12', id: '12'},
-        {day: 'Day 13', id: '13'},
-        {day: 'Day 14', id: '14'},
-        {day: 'Day 15', id: '15'},
-        {day: 'Day 16', id: '16'},
-        {day: 'Day 17', id: '17'},
-        {day: 'Day 18', id: '18'},
-        {day: 'Day 19', id: '19'},
-        {day: 'Day 20', id: '20'},
-        {day: 'Day 21', id: '21'},
-        {day: 'Day 22', id: '22'},
-        {day: 'Day 23', id: '23'},
-        {day: 'Day 24', id: '24'},
-        {day: 'Day 25', id: '25'},
-        {day: 'Day 26', id: '26'},
-        {day: 'Day 27', id: '27'},
-        {day: 'Day 28', id: '28'},
-        {day: 'Day 29', id: '29'},
-        {day: 'Day 30', id: '30'},
+        {day: 'Day 1', checked: true, id: '1'},
+        {day: 'Day 2', checked: true, id: '2'},
+        {day: 'Day 3', checked: true, id: '3'},
+        {day: 'Day 4', checked: true, id: '4'},
+        {day: 'Day 5', checked: false, id: '5'},
+        {day: 'Day 6', checked: true, id: '6'},
+        {day: 'Day 7', checked: true, id: '7'},
+        {day: 'Day 8', checked: true, id: '8'},
+        {day: 'Day 9', checked: true, id: '9'},
+        {day: 'Day 10', checked: true, id: '10'},
+        {day: 'Day 11', checked: true, id: '11'},
+        {day: 'Day 12', checked: true, id: '12'},
+        {day: 'Day 13', checked: true, id: '13'},
+        {day: 'Day 14', checked: true, id: '14'},
+        {day: 'Day 15', checked: true, id: '15'},
+        {day: 'Day 16', checked: true, id: '16'},
+        {day: 'Day 17', checked: true, id: '17'},
+        {day: 'Day 18', checked: true, id: '18'},
+        {day: 'Day 19', checked: true, id: '19'},
+        {day: 'Day 20', checked: false, id: '20'},
+        {day: 'Day 21', checked: false, id: '21'},
+        {day: 'Day 22', checked: false, id: '22'},
+        {day: 'Day 23', checked: true, id: '23'},
+        {day: 'Day 24', checked: true, id: '24'},
+        {day: 'Day 25', checked: true, id: '25'},
+        {day: 'Day 26', checked: true, id: '26'},
+        {day: 'Day 27', checked: true, id: '27'},
+        {day: 'Day 28', checked: true, id: '28'},
+        {day: 'Day 29', checked: false, id: '29'},
+        {day: 'Day 30', checked: true, id: '30'},
     ])
 
     const handleDropDownChange = (value) => {
         setSelectedValue(value)
     }
+    const handleCheckChange = (itemID) => {
+        let newSheet = trackerSheet.map(item => {
+            return item.id == itemID ? {...item, checked: !item.checked} :item
+        })
+        // newSheet[(itemID - 1)].checked = !(newSheet[(itemID - 1)].checked)
+        setTrackerSheet(newSheet)
+    }
+
     return (
         <Container style={styles.container}> 
             <Form>
@@ -84,7 +92,7 @@ export default function HabitsScreen() {
                         <Card style={styles.card}>
                             <CardItem style={styles.item}> 
                                 <Left>
-                                    <CheckBox/>
+                                    <CheckBox checked={item.checked} onPress={() => handleCheckChange(item.id)}/>
                                 </Left>
                                 <Right>
                                     <Text style={{textAlign: 'center'}}>{item.day}</Text>
