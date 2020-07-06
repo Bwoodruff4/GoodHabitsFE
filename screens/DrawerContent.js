@@ -12,7 +12,11 @@ import { AuthContext } from '../Components/context'
 
 export function DrawerContent(props) {
 
+    const { userInfo } = props
+
     const { signOut } = useContext(AuthContext)
+    
+    console.log(userInfo,"DrawerContent Page")
 
     return (
         <View style={{flex:1}}>
@@ -43,7 +47,7 @@ export function DrawerContent(props) {
                         />
                     )}
                     label="Habits"
-                    onPress={() => {props.navigation.navigate('Habits')}}
+                    onPress={() => {props.navigation.navigate('Habits', {screen: "Habits", params: {userInfo: userInfo}})}}
                 >
                 </DrawerItem>
             </DrawerContentScrollView>

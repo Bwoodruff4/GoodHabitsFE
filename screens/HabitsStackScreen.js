@@ -11,11 +11,11 @@ const HabitsStack = createStackNavigator();
 const HabitsStackScreen = ({navigation}) => (
     <HabitsStack.Navigator screenOptions={{
         headerStyle: {
-        backgroundColor: '#039BE5',
+            backgroundColor: '#039BE5',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
-        fontWeight: 'bold'
+            fontWeight: 'bold'
         },
         headerTitleAlign: 'center'
     }}>

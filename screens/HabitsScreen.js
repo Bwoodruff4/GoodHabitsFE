@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import { StyleSheet, View, FlatList, SafeAreaView } from 'react-native';
+import React, {useState, useEffect} from 'react'
+import { StyleSheet, View, FlatList } from 'react-native';
 import {
     Button,
     Container,
@@ -16,44 +16,27 @@ import {
     CheckBox
 } from "native-base";
 
-export default function HabitsScreen() {
-    const [selectedValue, setSelectedValue] = useState(undefined)
-    const [trackerSheet, setTrackerSheet] = useState([
-        {day: 'Day 1', checked: true, id: '1'},
-        {day: 'Day 2', checked: true, id: '2'},
-        {day: 'Day 3', checked: true, id: '3'},
-        {day: 'Day 4', checked: true, id: '4'},
-        {day: 'Day 5', checked: false, id: '5'},
-        {day: 'Day 6', checked: true, id: '6'},
-        {day: 'Day 7', checked: true, id: '7'},
-        {day: 'Day 8', checked: true, id: '8'},
-        {day: 'Day 9', checked: true, id: '9'},
-        {day: 'Day 10', checked: true, id: '10'},
-        {day: 'Day 11', checked: true, id: '11'},
-        {day: 'Day 12', checked: true, id: '12'},
-        {day: 'Day 13', checked: true, id: '13'},
-        {day: 'Day 14', checked: true, id: '14'},
-        {day: 'Day 15', checked: true, id: '15'},
-        {day: 'Day 16', checked: true, id: '16'},
-        {day: 'Day 17', checked: true, id: '17'},
-        {day: 'Day 18', checked: true, id: '18'},
-        {day: 'Day 19', checked: true, id: '19'},
-        {day: 'Day 20', checked: false, id: '20'},
-        {day: 'Day 21', checked: false, id: '21'},
-        {day: 'Day 22', checked: false, id: '22'},
-        {day: 'Day 23', checked: true, id: '23'},
-        {day: 'Day 24', checked: true, id: '24'},
-        {day: 'Day 25', checked: true, id: '25'},
-        {day: 'Day 26', checked: true, id: '26'},
-        {day: 'Day 27', checked: true, id: '27'},
-        {day: 'Day 28', checked: true, id: '28'},
-        {day: 'Day 29', checked: false, id: '29'},
-        {day: 'Day 30', checked: true, id: '30'},
-    ])
+const habitURL = `http://10.0.2.2:3000/habits`
+const userURL = `http://10.0.2.2:3000/users/1`
 
-    const handleDropDownChange = (value) => {
-        setSelectedValue(value)
+
+export default function HabitsScreen({route, navigation}) {
+    const { userInfo } = route.params
+    const habits = userInfo.habits
+
+    const [habitList, setHabitList] = useState([])
+    const [selectedValue, setSelectedValue] = useState({})
+    const [trackerSheet, setTrackerSheet] = useState([])
+
+    const handleDropDownChange = (habit) => {
+        if (habit == null){
+            return
+        }
+        // console.log(userInfo, "Habits Screen")
+        setSelectedValue(habit)
+        getTrackerSheet(habit)
     }
+
     const handleCheckChange = (itemID) => {
         let newSheet = trackerSheet.map(item => {
             return item.id == itemID ? {...item, checked: !item.checked} :item
@@ -62,26 +45,36 @@ export default function HabitsScreen() {
         setTrackerSheet(newSheet)
     }
 
+    const getTrackerSheet = (habit) => {
+        fetch(habitURL + `/${habit.id}`)
+        .then(response => response.json())
+        .then(habit => {
+            setTrackerSheet(habit.days)
+        })      
+    }
+
+    useEffect(()=> {
+        setHabitList(habits)
+    }, [])
+
     return (
         <Container style={styles.container}> 
             <Form>
-                <Item picker>
-                    <Picker
-                        mode="dropdown"
-                        iosIcon={<Icon name="arrow-down" />}
-                        style={{ width: undefined }}
-                        placeholder="Select your Habit"
-                        placeholderStyle={{ color: "#bfc6ea" }}
-                        placeholderIconColor="#007aff"
-                        selectedValue={selectedValue}
-                        onValueChange={(val) => handleDropDownChange(val)}
-                    >
-                        <Picker.Item label="Commit to Github" value="key0" />
-                        <Picker.Item label="Excercise" value="key1" />
-                        <Picker.Item label="Read" value="key2" />
-                        <Picker.Item label="Meditate" value="key3" />
-                    </Picker>
-                </Item>
+                <Picker
+                    mode="dropdown"
+                    iosIcon={<Icon name="arrow-down" />}
+                    style={{ width: undefined }}
+                    placeholder="Select your Habit"
+                    placeholderStyle={{ color: "#bfc6ea" }}
+                    placeholderIconColor="#007aff"
+                    selectedValue={selectedValue}
+                    onValueChange={(val) => handleDropDownChange(val)}
+                >
+                    <Picker.Item label="Select your Habit:" />
+                    {
+                        habitList.map(habit => <Picker.Item label={habit.title} value={habit} key={habit.id} />)
+                    }   
+                </Picker>
             </Form>
             <Container style={styles.cardItems}>
                 <FlatList 
@@ -92,7 +85,7 @@ export default function HabitsScreen() {
                         <Card style={styles.card}>
                             <CardItem style={styles.item}> 
                                 <Left>
-                                    <CheckBox checked={item.checked} onPress={() => handleCheckChange(item.id)}/>
+                                    <CheckBox checked={Boolean(item.checked)} onPress={() => handleCheckChange(item.id)}/>
                                 </Left>
                                 <Right>
                                     <Text style={{textAlign: 'center'}}>{item.day}</Text>
