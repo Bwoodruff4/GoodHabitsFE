@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import {View, Text, StyleSheet } from "react-native"
 import {
     DrawerContentScrollView,
@@ -14,10 +14,19 @@ export function DrawerContent(props) {
 
     const { userInfo } = props
 
-    const { signOut } = useContext(AuthContext)
-    
-    console.log(userInfo,"DrawerContent Page")
+    const { getUserInfo } = props
 
+    const { signOut } = useContext(AuthContext)
+
+    const updateUserInfo = () => { 
+
+    }
+
+    const handleHabitsPress = () => {
+        props.navigation.navigate('Habits', {screen: "Habits", params: {userInfo: userInfo}})
+    }
+
+    
     return (
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -28,7 +37,7 @@ export function DrawerContent(props) {
                         />
                     )}
                     label="Home"
-                    onPress={() => {props.navigation.navigate('Home')}}
+                    onPress={() => {props.navigation.navigate('Home', {screen: "Home", params: {userInfo: userInfo}})}}
                 />
                 <DrawerItem 
                     icon={() => (
@@ -37,7 +46,7 @@ export function DrawerContent(props) {
                         />
                     )}
                     label="Profile"
-                    onPress={() => {props.navigation.navigate('Profile')}}
+                    onPress={() => {props.navigation.navigate('Profile', {screen: "Profile", params: {userInfo: userInfo}})}}
                 >
                 </DrawerItem>
                 <DrawerItem 

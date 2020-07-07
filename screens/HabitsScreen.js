@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
 import {
     Button,
     Container,
@@ -13,49 +13,75 @@ import {
     CardItem,
     Right,
     Left,
-    CheckBox
-} from "native-base";
+    // CheckBox
+} from "native-base"
+import { CheckBox } from 'react-native-elements'
 
-const habitURL = `http://10.0.2.2:3000/habits`
-const userURL = `http://10.0.2.2:3000/users/1`
+const habitURL = `http://10.0.2.2:3000/habits/`
+const userURL = `http://10.0.2.2:3000/users/`
+const dayURL = `http://10.0.2.2:3000/days/`
 
 
 export default function HabitsScreen({route, navigation}) {
     const { userInfo } = route.params
-    const habits = userInfo.habits
-
-    const [habitList, setHabitList] = useState([])
+    // console.log(userInfo, "Habits Screen")
+    const [habitList, setHabitList] = useState(userInfo.habits)
     const [selectedValue, setSelectedValue] = useState({})
     const [trackerSheet, setTrackerSheet] = useState([])
+    
+    const getUserHabits = (url) => {
+        fetch(url + `${userInfo.id}`)
+        .then(response => response.json())
+        .then(userHabits => setHabitList(userHabits.habits))
+    }
+
+    useEffect(()=> { 
+        getUserHabits(userURL)
+    }, [])
 
     const handleDropDownChange = (habit) => {
         if (habit == null){
             return
         }
-        // console.log(userInfo, "Habits Screen")
+        // getUserHabits(userURL)
         setSelectedValue(habit)
         getTrackerSheet(habit)
     }
-
+    
     const handleCheckChange = (itemID) => {
         let newSheet = trackerSheet.map(item => {
             return item.id == itemID ? {...item, checked: !item.checked} :item
         })
-        // newSheet[(itemID - 1)].checked = !(newSheet[(itemID - 1)].checked)
         setTrackerSheet(newSheet)
+        let dayToBeUpdated = trackerSheet.filter(day => day.id === itemID)
+        dayToBeUpdated.checked = !dayToBeUpdated.checked
+        dayToBeUpdated.checked = dayToBeUpdated.checked ? 1 : 0
+        console.log(dayToBeUpdated)
+        fetch(dayURL + `${itemID}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                day: {
+                    day: dayToBeUpdated.day,
+                    checked: dayToBeUpdated.checked,
+                    habit_id: dayToBeUpdated.habit_id
+                }
+            })
+        })
+        .then(response => response.json())
+        .then(response => console.log(response))
     }
 
     const getTrackerSheet = (habit) => {
-        fetch(habitURL + `/${habit.id}`)
+        setTrackerSheet([])
+        fetch(habitURL + `${habit.id}`)
         .then(response => response.json())
         .then(habit => {
             setTrackerSheet(habit.days)
-        })      
+        })     
     }
-
-    useEffect(()=> {
-        setHabitList(habits)
-    }, [])
 
     return (
         <Container style={styles.container}> 
@@ -85,7 +111,7 @@ export default function HabitsScreen({route, navigation}) {
                         <Card style={styles.card}>
                             <CardItem style={styles.item}> 
                                 <Left>
-                                    <CheckBox checked={Boolean(item.checked)} onPress={() => handleCheckChange(item.id)}/>
+                                    <CheckBox size={40} iconLeft center iconType="material" checkedIcon='clear' uncheckedIcon='add' checkedColor='red' checked={Boolean(item.checked)} onPress={() => handleCheckChange(item.id)}/>
                                 </Left>
                                 <Right>
                                     <Text style={{textAlign: 'center'}}>{item.day}</Text>
@@ -109,16 +135,14 @@ const styles = StyleSheet.create({
         margin: 10
     },
     cardItems: {
-        alignItems: 'center'
+        alignItems: 'center',
     },
     card: {
-        marginHorizontal: 25,
+        marginHorizontal: 5,
     },
     item: {
         marginHorizontal: 5,
-        // padding: 5,
         height: 65,
-        width: 110,
-
+        width: 105,
     }
 })

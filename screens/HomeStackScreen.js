@@ -19,7 +19,7 @@ const HomeStackScreen = ({navigation}) => (
         },
         headerTitleAlign: 'center'
     }}>
-      <HomeStack.Screen name="Good Habits" component={HomeScreen}
+      <HomeStack.Screen name="Home" component={HomeScreen}
         options={{
             headerLeft: () => (
                 <Button transparent light>

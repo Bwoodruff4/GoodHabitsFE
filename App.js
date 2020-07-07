@@ -23,20 +23,15 @@ import { AuthContext } from './Components/context'
 import { isLoading } from 'expo-font';
 import AsyncStorage from '@react-native-community/async-storage';
 
-// import { FontDisplay } from 'expo-font';
-
-// const getFonts = () => FontDisplay.loadAsync({
-//   'font-type': require('./location')
-// })
 
 const Drawer = createDrawerNavigator();
 
 const loginURL = `http://10.0.2.2:3000/login`
 
-const userURL = `http://10.0.2.2:3000/users/1`
+const userURL = `http://10.0.2.2:3000/users/10`
 
 export default function App() {
-  // const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   // const [userToken, setUserToken] = useState(null)
   const [userInfo, setUserInfo] = useState({})
 
@@ -97,11 +92,11 @@ export default function App() {
         })
       })
       .then(response => response.json())
-      .then(userData => console.log(userData)) 
+      // .then(userData => console.log(userData)) 
 
       let userToken
       userToken = null
-      if( username == 'test' && password == 'test') {
+      if( username == 'Blake' && password == 'Blake') {
         userToken = 'token'
         try {
           await AsyncStorage.setItem('userToken', userToken)
@@ -127,15 +122,27 @@ export default function App() {
     }
   }))
 
-  useEffect(() => {
+  const getUserInfo = () => {
+    // const fetchData = async () => {
+    //   const data = await fetch(userURL)
+    //    .then(response => response.json())
+    //   setUserInfo(data)
+    //   setIsLoading(false)
+    //  }
+    //  fetchData()
     fetch(userURL)
-      .then(response => response.json())
-      .then(userInfo => setUserInfo(userInfo))
-  }, [])
+    .then(response => response.json())
+    .then(userInfo => setUserInfo(userInfo))
+  }
+
+  // useEffect(() => { 
+  //     getUserInfo()
+  // }, [])
 
   useEffect(() => {
     setTimeout(async() => {
       // setIsLoading(false)
+      getUserInfo()
       let userToken
       userToken = null
       try {
@@ -144,6 +151,7 @@ export default function App() {
         console.log(error)
       }
       dispatch({type: 'RETRIEVE_TOKEN', token: userToken })
+      
     },1000)
   }, [])
 
@@ -155,13 +163,13 @@ export default function App() {
     )
   }
 
-  console.log(userInfo,"App Page")
+  // console.log(userInfo,"App Page")
   return (
     <StyleProvider style={getTheme(material)}>
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
           {loginState.userToken !== null ? (
-            <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} userInfo={userInfo}/>} >
+            <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} userInfo={userInfo} getUserInfo={getUserInfo}/>} >
               <Drawer.Screen name="Home" component={HomeStackScreen} gobalStyle={getTheme(material)}/>
               <Drawer.Screen name="Profile" component={ProfileStackScreen} gobalStyle={getTheme(material)}/>
               <Drawer.Screen name="Habits" component={HabitsStackScreen} gobalStyle={getTheme(material)}/>

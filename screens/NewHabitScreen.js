@@ -14,9 +14,14 @@ import {
 
 const habitURL = `http://10.0.2.2:3000/habits`
 
-export default function NewHabitScreen({navigation}) {
+export default function NewHabitScreen({route,navigation}) {
+    const { userInfo } = route.params
     const [title, setTitle] = useState('')
     const [selectedValue, setSelectedValue] = useState(undefined)
+    const useForceUpdate = () => useState()[1]
+    const forceUpdate = useForceUpdate()
+
+    console.log(userInfo, "New Habit Screen")
     
     const handleDropDownChange = (value) => {
         setSelectedValue(value)
@@ -34,7 +39,7 @@ export default function NewHabitScreen({navigation}) {
             },
             body: JSON.stringify({
                 habit: {
-                    user_id: 2,
+                    user_id: userInfo.id,
                     title: title,
                     day_count: parseInt(selectedValue)
                 }
@@ -43,6 +48,8 @@ export default function NewHabitScreen({navigation}) {
         .then(response => response.json())
         .then(response => console.log(response))
 
+
+        forceUpdate()
         navigation.navigate('Profile')
     }
 
