@@ -9,67 +9,74 @@ import {
     Button,
     Text,
     Icon,
+    Picker,
   } from "native-base";
 
 const habitURL = `http://10.0.2.2:3000/habits`
 
-export default function NewHabitScreen({navigation}) {
+export default function NewHabitScreen({route,navigation}) {
+    const { userInfo } = route.params
     const [title, setTitle] = useState('')
-    const [dayCount, setDayCount] = useState(0)
+    const [selectedValue, setSelectedValue] = useState(undefined)
+
+    console.log(userInfo, "New Habit Screen")
     
-    const handleEmailChange = (val) => {
-        setEmail(val)
+    const handleDropDownChange = (value) => {
+        setSelectedValue(value)
+        console.log(value)
     }
-    const handleUsernameChange = (val) => {
-        setUsername(val)
+    const handleTitleChange = (val) => {
+        setTitle(val)
     }
-    const handlePasswordChange = (val) => {
-        setPassword(val)
-    }
-    const handlePasswordConfirmedChange = (val) => {
-        setPasswordConfirmed(val)
-    }
+
     const handleSubmit = () => {
-        fetch(userURL, {
+        fetch(habitURL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                user: {
-                    username: username,
-                    password: password,
-                    email: email
+                habit: {
+                    user_id: userInfo.id,
+                    title: title,
+                    day_count: parseInt(selectedValue)
                 }
             })
         })
         .then(response => response.json())
         .then(response => console.log(response))
 
-        navigation.navigate('SignInScreen')
+        navigation.navigate('Profile')
     }
 
     return (
         <View style={styles.container}>
             <Form style={styles.loginContainer}>
                 <Item>
-                    <Icon active name="mail" />
-                    <Input placeholder="Email" onChangeText={(val) => handleEmailChange(val)}/>
+                    <Input placeholder="Enter Habit Title" onChangeText={(val) => handleTitleChange(val)}/>
                 </Item>
                 <Item>
-                    <Icon active name="person" />
-                    <Input placeholder="Username" onChangeText={(val) => handleUsernameChange(val)}/>
-                </Item>
-                <Item>
-                    <Icon active name="lock" />
-                    <Input secureTextEntry placeholder="Password" onChangeText={(val) => handlePasswordChange(val)}/>
-                </Item>
-                <Item>
-                    <Icon active name="lock" />
-                    <Input secureTextEntry placeholder="Re-enter Password" onChangeText={(val) => handlePasswordConfirmedChange(val)}/>
+                    <Text>Number of Days:</Text>
+                    <Picker
+                        mode="dropdown"
+                        iosIcon={<Icon name="arrow-down" />}
+                        style={{ width: undefined }}
+                        placeholder="Select Number of Days"
+                        placeholderStyle={{ color: "#bfc6ea" }}
+                        placeholderIconColor="#007aff"
+                        selectedValue={selectedValue}
+                        onValueChange={(val) => handleDropDownChange(val)}
+                    >
+                        <Picker.Item label="15" value='15' />
+                        <Picker.Item label="30" value='30' />
+                        <Picker.Item label="60" value='60' />
+                    </Picker>
                 </Item>
                 <Button block rounded style={styles.button} onPress={handleSubmit}>
-                    <Text style={{color:'white', fontWeight:'bold'}}>Sign Up</Text>
+                    <Text style={{color:'white', fontWeight:'bold'}}>Create Habit</Text>
+                </Button>
+                <Button block rounded bordered style={styles.button} onPress={() => navigation.navigate('Profile')}>
+                    <Text style={{fontWeight:'bold'}}>Cancel</Text>
                 </Button>
             </Form>
         </View>

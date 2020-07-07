@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     logo: {
-        height: 200,
-        width: 200,
+        height: 350,
+        width: 350,
     },
     buttonContainer: {
         height: 100,

@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import { StyleSheet, View, FlatList, SafeAreaView } from 'react-native';
+import React, {useState, useEffect} from 'react'
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
 import {
     Button,
     Container,
@@ -13,67 +13,106 @@ import {
     CardItem,
     Right,
     Left,
-    CheckBox
-} from "native-base";
+    // CheckBox
+} from "native-base"
+import { CheckBox } from 'react-native-elements'
 
-export default function HabitsScreen() {
-    const [selectedValue, setSelectedValue] = useState(undefined)
-    const [trackerSheet, setTrackerSheet] = useState([
-        {day: 'Day 1', id: '1'},
-        {day: 'Day 2', id: '2'},
-        {day: 'Day 3', id: '3'},
-        {day: 'Day 4', id: '4'},
-        {day: 'Day 5', id: '5'},
-        {day: 'Day 6', id: '6'},
-        {day: 'Day 7', id: '7'},
-        {day: 'Day 8', id: '8'},
-        {day: 'Day 9', id: '9'},
-        {day: 'Day 10', id: '10'},
-        {day: 'Day 11', id: '11'},
-        {day: 'Day 12', id: '12'},
-        {day: 'Day 13', id: '13'},
-        {day: 'Day 14', id: '14'},
-        {day: 'Day 15', id: '15'},
-        {day: 'Day 16', id: '16'},
-        {day: 'Day 17', id: '17'},
-        {day: 'Day 18', id: '18'},
-        {day: 'Day 19', id: '19'},
-        {day: 'Day 20', id: '20'},
-        {day: 'Day 21', id: '21'},
-        {day: 'Day 22', id: '22'},
-        {day: 'Day 23', id: '23'},
-        {day: 'Day 24', id: '24'},
-        {day: 'Day 25', id: '25'},
-        {day: 'Day 26', id: '26'},
-        {day: 'Day 27', id: '27'},
-        {day: 'Day 28', id: '28'},
-        {day: 'Day 29', id: '29'},
-        {day: 'Day 30', id: '30'},
-    ])
+const habitURL = `http://10.0.2.2:3000/habits/`
+const userURL = `http://10.0.2.2:3000/users/`
+const dayURL = `http://10.0.2.2:3000/days/`
 
-    const handleDropDownChange = (value) => {
-        setSelectedValue(value)
+
+export default function HabitsScreen({route, navigation}) {
+    const { userInfo } = route.params
+    // console.log(userInfo, "Habits Screen")
+    const [habitList, setHabitList] = useState(userInfo.habits)
+    const [selectedValue, setSelectedValue] = useState({})
+    const [trackerSheet, setTrackerSheet] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+    
+    const getUserHabits = (url) => {
+        fetch(url + `${userInfo.id}`)
+        .then(response => response.json())
+        .then(userHabits => setHabitList(userHabits.habits))
     }
+
+    useEffect(()=> { 
+        getUserHabits(userURL)
+    }, [])
+
+    const handleDropDownChange = (habit) => {
+        if (habit == null){
+            return
+        }
+        setIsLoading(true)
+        setTimeout(() => {
+            // getUserHabits(userURL)
+            setSelectedValue(habit)
+            getTrackerSheet(habit)
+            setIsLoading(false)
+        },1000)
+    }
+    
+    const handleCheckChange = (itemID) => {
+        let newSheet = trackerSheet.map(item => {
+            return item.id == itemID ? {...item, checked: !item.checked} :item
+        })
+        setTrackerSheet(newSheet)
+        let dayToBeUpdated = trackerSheet.filter(day => day.id === itemID)
+        dayToBeUpdated.checked = !dayToBeUpdated.checked
+        dayToBeUpdated.checked = dayToBeUpdated.checked ? 1 : 0
+        console.log(dayToBeUpdated)
+        fetch(dayURL + `${itemID}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                day: {
+                    day: dayToBeUpdated.day,
+                    checked: dayToBeUpdated.checked,
+                    habit_id: dayToBeUpdated.habit_id
+                }
+            })
+        })
+        .then(response => response.json())
+        .then(response => console.log(response))
+    }
+
+    const getTrackerSheet = (habit) => {
+        setTrackerSheet([])
+        fetch(habitURL + `${habit.id}`)
+        .then(response => response.json())
+        .then(habit => {
+            setTrackerSheet(habit.days)
+        })     
+    }
+    if (isLoading) {
+        return(
+          <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
+            <ActivityIndicator size="large"/>
+          </View>
+        )
+      }
+
     return (
         <Container style={styles.container}> 
             <Form>
-                <Item picker>
-                    <Picker
-                        mode="dropdown"
-                        iosIcon={<Icon name="arrow-down" />}
-                        style={{ width: undefined }}
-                        placeholder="Select your Habit"
-                        placeholderStyle={{ color: "#bfc6ea" }}
-                        placeholderIconColor="#007aff"
-                        selectedValue={selectedValue}
-                        onValueChange={(val) => handleDropDownChange(val)}
-                    >
-                        <Picker.Item label="Commit to Github" value="key0" />
-                        <Picker.Item label="Excercise" value="key1" />
-                        <Picker.Item label="Read" value="key2" />
-                        <Picker.Item label="Meditate" value="key3" />
-                    </Picker>
-                </Item>
+                <Picker
+                    mode="dropdown"
+                    iosIcon={<Icon name="arrow-down" />}
+                    style={{ width: undefined }}
+                    placeholder="Select your Habit"
+                    placeholderStyle={{ color: "#bfc6ea" }}
+                    placeholderIconColor="#007aff"
+                    selectedValue={selectedValue}
+                    onValueChange={(val) => handleDropDownChange(val)}
+                >
+                    <Picker.Item label="Select your Habit:" />
+                    {
+                        habitList.map(habit => <Picker.Item label={habit.title} value={habit} key={habit.id} />)
+                    }   
+                </Picker>
             </Form>
             <Container style={styles.cardItems}>
                 <FlatList 
@@ -84,7 +123,7 @@ export default function HabitsScreen() {
                         <Card style={styles.card}>
                             <CardItem style={styles.item}> 
                                 <Left>
-                                    <CheckBox/>
+                                    <CheckBox size={40} iconLeft center iconType="material" checkedIcon='clear' uncheckedIcon='add' checkedColor='red' checked={Boolean(item.checked)} onPress={() => handleCheckChange(item.id)}/>
                                 </Left>
                                 <Right>
                                     <Text style={{textAlign: 'center'}}>{item.day}</Text>
@@ -108,16 +147,14 @@ const styles = StyleSheet.create({
         margin: 10
     },
     cardItems: {
-        alignItems: 'center'
+        alignItems: 'center',
     },
     card: {
-        marginHorizontal: 25,
+        marginHorizontal: 5,
     },
     item: {
         marginHorizontal: 5,
-        // padding: 5,
         height: 65,
-        width: 110,
-
+        width: 105,
     }
 })
