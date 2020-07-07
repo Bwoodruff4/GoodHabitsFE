@@ -28,6 +28,7 @@ export default function HabitsScreen({route, navigation}) {
     const [habitList, setHabitList] = useState(userInfo.habits)
     const [selectedValue, setSelectedValue] = useState({})
     const [trackerSheet, setTrackerSheet] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     
     const getUserHabits = (url) => {
         fetch(url + `${userInfo.id}`)
@@ -43,9 +44,13 @@ export default function HabitsScreen({route, navigation}) {
         if (habit == null){
             return
         }
-        // getUserHabits(userURL)
-        setSelectedValue(habit)
-        getTrackerSheet(habit)
+        setIsLoading(true)
+        setTimeout(() => {
+            // getUserHabits(userURL)
+            setSelectedValue(habit)
+            getTrackerSheet(habit)
+            setIsLoading(false)
+        },1000)
     }
     
     const handleCheckChange = (itemID) => {
@@ -82,6 +87,13 @@ export default function HabitsScreen({route, navigation}) {
             setTrackerSheet(habit.days)
         })     
     }
+    if (isLoading) {
+        return(
+          <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
+            <ActivityIndicator size="large"/>
+          </View>
+        )
+      }
 
     return (
         <Container style={styles.container}> 

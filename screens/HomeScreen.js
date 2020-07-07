@@ -1,5 +1,5 @@
 import React, {useState, useEffect } from 'react'
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import NavBar from '../Components/NavBar'
 import { 
     Container, 
@@ -17,22 +17,36 @@ import {
 export default function HomeScreen({route, navigation}) {
     // const { userInfo } = route.params
     const [userInfo, setUserInfo] = useState({})
+    const [userHabits, setUserHabits] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
     console.log(route.params, "Home Screen")
+    console.log(userInfo, "Home Screen")
 
     useEffect(() => { 
-        const fetchData = async () => {
-         const data = await fetch(userURL)
-          .then(response => response.json())
-         setUserInfo(data)
-        }
-        fetchData()
+        setTimeout(() => {
+            setIsLoading(false)
+        },1000)
+        fetch(userURL)
+        .then(response => response.json())
+        .then(userInfo => {
+            setUserInfo(userInfo)
+            setUserHabits(userInfo.habits)
+        })
     }, [])
+
+    if (isLoading) {
+        return(
+          <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
+            <ActivityIndicator size="large"/>
+          </View>
+        )
+      }
 
     return (
         <Container style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', padding: 30 }}>
             <Card>
                 <Text style={{fontSize:35, fontWeight: 'bold', textAlign:'center', padding: 30}}>Welcome to Good Habits, {userInfo.username}</Text>
-                <Text style={{fontSize:30, fontStyle: 'italic', textAlign:'center', padding: 30}}>You are currently tracking {userInfo.habits.length} habits.</Text>
+                <Text style={{fontSize:30, fontStyle: 'italic', textAlign:'center', padding: 30}}>You are currently tracking {userHabits.length} habits.</Text>
             </Card>
         </Container>
     )

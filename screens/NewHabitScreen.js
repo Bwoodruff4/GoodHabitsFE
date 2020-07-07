@@ -18,8 +18,6 @@ export default function NewHabitScreen({route,navigation}) {
     const { userInfo } = route.params
     const [title, setTitle] = useState('')
     const [selectedValue, setSelectedValue] = useState(undefined)
-    const useForceUpdate = () => useState()[1]
-    const forceUpdate = useForceUpdate()
 
     console.log(userInfo, "New Habit Screen")
     
@@ -48,8 +46,6 @@ export default function NewHabitScreen({route,navigation}) {
         .then(response => response.json())
         .then(response => console.log(response))
 
-
-        forceUpdate()
         navigation.navigate('Profile')
     }
 

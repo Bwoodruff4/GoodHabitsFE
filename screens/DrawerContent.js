@@ -14,18 +14,7 @@ export function DrawerContent(props) {
 
     const { userInfo } = props
 
-    const { getUserInfo } = props
-
     const { signOut } = useContext(AuthContext)
-
-    const updateUserInfo = () => { 
-
-    }
-
-    const handleHabitsPress = () => {
-        props.navigation.navigate('Habits', {screen: "Habits", params: {userInfo: userInfo}})
-    }
-
     
     return (
         <View style={{flex:1}}>
