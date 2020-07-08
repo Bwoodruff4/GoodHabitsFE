@@ -10,6 +10,8 @@ import {
 } from 'native-base'
 import { AuthContext } from '../Components/context'
 
+const userURL = `http://10.0.2.2:3000/users/`
+
 export function DrawerContent(props) {
 
     const { userInfo } = props

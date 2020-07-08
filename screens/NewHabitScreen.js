@@ -45,7 +45,6 @@ export default function NewHabitScreen({route,navigation}) {
         })
         .then(response => response.json())
         .then(response => console.log(response))
-
         navigation.navigate('Profile')
     }
 

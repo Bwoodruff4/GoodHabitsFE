@@ -9,6 +9,7 @@ import {
 
 export default function ProfileScreen({route, navigation}) {
     const { userInfo } = route.params
+    const { getUserInfo } = route.params
     console.log(userInfo, "Profile Screen")
     return (
         <View style={styles.container}>
