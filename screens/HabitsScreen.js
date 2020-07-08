@@ -37,6 +37,7 @@ export default function HabitsScreen({route, navigation}) {
     }
 
     const updateUserHabits = () => {
+        setTrackerSheet([])
         fetch(userURL + `${userInfo.id}`)
         .then(response => response.json())
         .then(userHabits => setHabitList(userHabits.habits))
@@ -56,7 +57,7 @@ export default function HabitsScreen({route, navigation}) {
             setSelectedValue(habit)
             // getUserHabits(userURL)
             setIsLoading(false)
-        },1000)
+        },100)
     }
     
     const handleCheckChange = (itemID) => {

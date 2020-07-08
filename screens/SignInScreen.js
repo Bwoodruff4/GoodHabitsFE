@@ -13,7 +13,7 @@ import {
 
 import { AuthContext } from '../Components/context'  
 
-export default function SignInScreen() {
+export default function SignInScreen({ navigation }) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
