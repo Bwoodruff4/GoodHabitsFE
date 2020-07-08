@@ -28,7 +28,7 @@ const Drawer = createDrawerNavigator();
 
 const loginURL = `http://10.0.2.2:3000/login`
 
-const userURL = `http://10.0.2.2:3000/users/10`
+const userURL = `http://10.0.2.2:3000/users/1`
 
 
 export default function App() {
@@ -123,14 +123,12 @@ export default function App() {
     }
   }))
 
-  const getUserInfo = () => {
-    const fetchData = async () => {
-      const data = await fetch(userURL)
-       .then(response => response.json())
+  const getUserInfo = async() => {
+      const response = await fetch(userURL)
+      const data = await response.json()
       setUserInfo(data)
-     }
-     fetchData()
   }
+  
 
   useEffect(() => { 
       getUserInfo()
@@ -153,7 +151,7 @@ export default function App() {
   }, [])
 
   if (loginState.isLoading) {
-    return(
+    return (
       <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
         <ActivityIndicator size="large"/>
       </View>
@@ -166,7 +164,7 @@ export default function App() {
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
           {loginState.userToken !== null ? (
-            <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} userInfo={userInfo}/>} >
+            <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} userInfo={userInfo} getUserInfo={getUserInfo}/>} >
               <Drawer.Screen name="Home" component={HomeStackScreen} gobalStyle={getTheme(material)}/>
               <Drawer.Screen name="Profile" component={ProfileStackScreen} gobalStyle={getTheme(material)}/>
               <Drawer.Screen name="Habits" component={HabitsStackScreen} gobalStyle={getTheme(material)}/>

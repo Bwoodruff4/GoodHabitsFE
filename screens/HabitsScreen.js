@@ -36,6 +36,12 @@ export default function HabitsScreen({route, navigation}) {
         .then(userHabits => setHabitList(userHabits.habits))
     }
 
+    const updateUserHabits = () => {
+        fetch(userURL + `${userInfo.id}`)
+        .then(response => response.json())
+        .then(userHabits => setHabitList(userHabits.habits))
+    }
+
     useEffect(()=> { 
         getUserHabits(userURL)
     }, [])
@@ -44,11 +50,11 @@ export default function HabitsScreen({route, navigation}) {
         if (habit == null){
             return
         }
+        getTrackerSheet(habit)
         setIsLoading(true)
         setTimeout(() => {
-            // getUserHabits(userURL)
             setSelectedValue(habit)
-            getTrackerSheet(habit)
+            // getUserHabits(userURL)
             setIsLoading(false)
         },1000)
     }
@@ -80,7 +86,6 @@ export default function HabitsScreen({route, navigation}) {
     }
 
     const getTrackerSheet = (habit) => {
-        setTrackerSheet([])
         fetch(habitURL + `${habit.id}`)
         .then(response => response.json())
         .then(habit => {
@@ -97,12 +102,12 @@ export default function HabitsScreen({route, navigation}) {
 
     return (
         <Container style={styles.container}> 
-            <Form>
+            <Form style={{flexDirection: 'row'}}>
                 <Picker
                     mode="dropdown"
                     iosIcon={<Icon name="arrow-down" />}
                     style={{ width: undefined }}
-                    placeholder="Select your Habit"
+                    // placeholder="Select your Habit"
                     placeholderStyle={{ color: "#bfc6ea" }}
                     placeholderIconColor="#007aff"
                     selectedValue={selectedValue}
@@ -113,6 +118,9 @@ export default function HabitsScreen({route, navigation}) {
                         habitList.map(habit => <Picker.Item label={habit.title} value={habit} key={habit.id} />)
                     }   
                 </Picker>
+                <Button transparent onPress={updateUserHabits}>
+                    <Icon name='refresh'/>
+                </Button>
             </Form>
             <Container style={styles.cardItems}>
                 <FlatList 
