@@ -34,19 +34,7 @@ https://github.com/Bwoodruff4/GoodHabitsBE
 
 This program comes equipped with all necessary gems. To use them locally, execute the command:
 
-`$ bundle`
-
-To install and use the database, run the commands:
-
-`$ rake db:seed `
-
-and 
-
-`$ rake db:migrate`
-
-Run the program by: 
-
-`rails s to start rails server`
+`$ bundle install`
 
 ## Features
 
