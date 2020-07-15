@@ -11,6 +11,11 @@
 
 The Good Habits App allows users to create an account in order to track habits they enter for 15, 30, or 60 days.
 
+## Demo
+
+[![Good Habits Demo](https://img.youtu.be/56iUok--p-Y/0.jpg)](https://youtu.be/56iUok--p-Y)
+https://youtu.be/56iUok--p-Y
+
 ## Technologies
 
 * Ruby - Version 2.6.1
