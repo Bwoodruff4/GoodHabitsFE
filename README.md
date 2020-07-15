@@ -13,7 +13,7 @@ The Good Habits App allows users to create an account in order to track habits t
 
 ## Demo
 
-![Good Habits Demo](https://youtu.be/56iUok--p-Y)
+[Good Habits Demo](https://youtu.be/56iUok--p-Y)
 
 ## Technologies
 
