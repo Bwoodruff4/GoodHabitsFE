@@ -80,7 +80,7 @@ export default function App() {
     signIn: async(username, password) => {
       // setUserToken('token')
       // setIsLoading(false)
-      fetch(loginURL, {
+      let userData = await fetch(loginURL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -91,19 +91,20 @@ export default function App() {
                 password: password,
             }
         })
-      })
-      .then(response => response.json())
-      // .then(userData => console.log(userData)) 
+      }).then(response => response.json())
 
-      let userToken
-      userToken = null
-      if( username == 'Blake' && password == 'Blake') {
-        userToken = 'token'
+      console.log(userData)
+      let userToken = null
+      if(userData.user != null && userData.user.username === username) {
+        userToken = userData.jwt
         try {
           await AsyncStorage.setItem('userToken', userToken)
         } catch(error) {
           console.log(error)
         }
+      }
+      else {
+        console.log(userData.message)
       }
       dispatch({type: 'LOGIN', id: username, token: userToken })
     },
@@ -137,7 +138,6 @@ export default function App() {
   useEffect(() => {
     setTimeout(async() => {
       // setIsLoading(false)
-      getUserInfo()
       let userToken
       userToken = null
       try {
@@ -146,7 +146,6 @@ export default function App() {
         console.log(error)
       }
       dispatch({type: 'RETRIEVE_TOKEN', token: userToken })
-      // getUserInfo()
     },1000)
   }, [])
 

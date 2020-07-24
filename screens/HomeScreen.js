@@ -19,8 +19,8 @@ export default function HomeScreen({route, navigation}) {
     const [userInfo, setUserInfo] = useState({})
     const [userHabits, setUserHabits] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    console.log(route.params, "Home Screen")
-    console.log(userInfo, "Home Screen")
+    // console.log(route.params, "Home Screen")
+    // console.log(userInfo, "Home Screen")
 
     useEffect(() => { 
         setTimeout(() => {
