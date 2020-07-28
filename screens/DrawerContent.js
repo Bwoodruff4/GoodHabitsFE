@@ -14,10 +14,10 @@ const userURL = `http://10.0.2.2:3000/users/`
 
 export function DrawerContent(props) {
 
-    const { userInfo } = props
+    const { userID } = props
 
     const { signOut } = useContext(AuthContext)
-    
+    console.log(userID, "Drawer")
     return (
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -28,7 +28,7 @@ export function DrawerContent(props) {
                         />
                     )}
                     label="Home"
-                    onPress={() => {props.navigation.navigate('Home', {screen: "Home", params: {userInfo: userInfo}})}}
+                    onPress={() => {props.navigation.navigate('Home', {screen: "Home", params: {userID: userID}})}}
                 />
                 <DrawerItem 
                     icon={() => (

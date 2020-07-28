@@ -32,13 +32,11 @@ const userURL = `http://10.0.2.2:3000/users/1`
 
 
 export default function App() {
-  // const [isLoading, setIsLoading] = useState(true)
-  // const [userToken, setUserToken] = useState(null)
   const [userInfo, setUserInfo] = useState({})
 
   const initialLoginState = {
     isLoading: true,
-    username: null,
+    userID: null,
     userToken: null,
   }
 
@@ -53,21 +51,21 @@ export default function App() {
       case 'LOGIN':
         return {
           ...prevState,
-          username: action.id,
+          userID: action.id,
           userToken: action.token,
           isLoading: false,
         }
       case 'LOGOUT':
         return {
           ...prevState,
-          username: null,
+          userID: null,
           userToken: null,
           isLoading: false,
         }
       case 'REGISTER':
         return {
           ...prevState,
-          username: action.id,
+          userID: action.id,
           userToken: action.token,
           isLoading: false,
         }
@@ -78,8 +76,6 @@ export default function App() {
 
   const authContext = useMemo(() => ({
     signIn: async(username, password) => {
-      // setUserToken('token')
-      // setIsLoading(false)
       let userData = await fetch(loginURL, {
         method: "POST",
         headers: {
@@ -92,7 +88,6 @@ export default function App() {
             }
         })
       }).then(response => response.json())
-
       console.log(userData)
       let userToken = null
       if(userData.user != null && userData.user.username === username) {
@@ -106,11 +101,9 @@ export default function App() {
       else {
         console.log(userData.message)
       }
-      dispatch({type: 'LOGIN', id: username, token: userToken })
+      dispatch({type: 'LOGIN', id: userData.user.id, token: userToken })
     },
     signOut: async() => {
-      // setUserToken(null)
-      // setIsLoading(false)
       try {
         await AsyncStorage.removeItem('userToken')
       } catch(error) {
@@ -130,16 +123,13 @@ export default function App() {
       setUserInfo(data)
   }
   
-
   useEffect(() => { 
       getUserInfo()
   }, [])
 
   useEffect(() => {
     setTimeout(async() => {
-      // setIsLoading(false)
-      let userToken
-      userToken = null
+      let userToken = null
       try {
         userToken = await AsyncStorage.getItem('userToken')
       } catch(error) {
@@ -157,17 +147,16 @@ export default function App() {
     )
   }
 
-  // console.log(userInfo,"App Page")
   return (
     <StyleProvider style={getTheme(material)}>
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
           {loginState.userToken !== null ? (
-            <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} userInfo={userInfo} getUserInfo={getUserInfo}/>} >
-              <Drawer.Screen name="Home" component={HomeStackScreen} gobalStyle={getTheme(material)}/>
-              <Drawer.Screen name="Profile" component={ProfileStackScreen} gobalStyle={getTheme(material)}/>
-              <Drawer.Screen name="Habits" component={HabitsStackScreen} gobalStyle={getTheme(material)}/>
-              <Drawer.Screen name="NewHabitScreen" component={NewHabitScreen} gobalStyle={getTheme(material)}/>
+            <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} userID={loginState.userID}/>} >
+              <Drawer.Screen name="Home" component={HomeStackScreen} userID={loginState.id}/>
+              <Drawer.Screen name="Profile" component={ProfileStackScreen}/>
+              <Drawer.Screen name="Habits" component={HabitsStackScreen}/>
+              <Drawer.Screen name="NewHabitScreen" component={NewHabitScreen}/>
             </Drawer.Navigator> 
           )
           :
@@ -178,12 +167,3 @@ export default function App() {
     </StyleProvider> 
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
