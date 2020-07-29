@@ -14,13 +14,13 @@ import {
 
     const userURL = `http://10.0.2.2:3000/users/1`
 
-export default function HomeScreen({route, navigation}) {
-    // const { userInfo } = route.params
+export default function HomeScreen({route, navigation, userID}) {
+    // const { userID } = route.params
     const [userInfo, setUserInfo] = useState({})
     const [userHabits, setUserHabits] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     // console.log(route.params, "Home Screen")
-    // console.log(userInfo, "Home Screen")
+    console.log(userID, "Home Screen")
 
     useEffect(() => { 
         setTimeout(() => {
