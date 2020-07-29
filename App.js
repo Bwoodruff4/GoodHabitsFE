@@ -1,9 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useState, useEffect, useMemo, useReducer} from 'react';
-// import { AppLoading } from 'expo';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-// import * as Font from 'expo-font';
-// import { Ionicons } from '@expo/vector-icons';
 import getTheme from './native-base-theme/components';
 import material from './native-base-theme/variables/material';
 import { createDrawerNavigator} from '@react-navigation/drawer'
@@ -22,6 +19,7 @@ import NewHabitScreen from './screens/NewHabitScreen'
 import { AuthContext } from './Components/context'
 import { isLoading } from 'expo-font';
 import AsyncStorage from '@react-native-community/async-storage';
+import { UserContext } from './Components/userContext';
 
 
 const Drawer = createDrawerNavigator();
@@ -33,6 +31,8 @@ const userURL = `http://10.0.2.2:3000/users/1`
 
 export default function App() {
   const [userInfo, setUserInfo] = useState({})
+
+
 
   const initialLoginState = {
     isLoading: true,
@@ -88,12 +88,12 @@ export default function App() {
             }
         })
       }).then(response => response.json())
-      console.log(userData)
       let userToken = null
       if(userData.user != null && userData.user.username === username) {
         userToken = userData.jwt
         try {
           await AsyncStorage.setItem('userToken', userToken)
+          // await AsyncStorage.setItem('userID', userData.user.id)
         } catch(error) {
           console.log(error)
         }
@@ -106,6 +106,7 @@ export default function App() {
     signOut: async() => {
       try {
         await AsyncStorage.removeItem('userToken')
+        // await AsyncStorage.removeItem('userID')
       } catch(error) {
         console.log(error)
       }
@@ -146,18 +147,20 @@ export default function App() {
       </View>
     )
   }
-
+  console.log(loginState.userID, "app screen")
   return (
     <StyleProvider style={getTheme(material)}>
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
           {loginState.userToken !== null ? (
-            <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} userID={loginState.userID}/>} >
-              <Drawer.Screen name="Home" component={HomeStackScreen} userID={loginState.id}/>
-              <Drawer.Screen name="Profile" component={ProfileStackScreen}/>
-              <Drawer.Screen name="Habits" component={HabitsStackScreen}/>
-              <Drawer.Screen name="NewHabitScreen" component={NewHabitScreen}/>
-            </Drawer.Navigator> 
+            <UserContext.Provider>
+              <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props}/>} >
+                <Drawer.Screen name="Home" component={HomeStackScreen}/>
+                <Drawer.Screen name="Profile" component={ProfileStackScreen}/>
+                <Drawer.Screen name="Habits" component={HabitsStackScreen}/>
+                <Drawer.Screen name="NewHabitScreen" component={NewHabitScreen}/>
+              </Drawer.Navigator> 
+            </UserContext.Provider>
           )
           :
             <RootStackScreen/>
