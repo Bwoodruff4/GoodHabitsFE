@@ -17,7 +17,7 @@ export function DrawerContent(props) {
     const { userID } = props
 
     const { signOut } = useContext(AuthContext)
-    console.log(userID, "Drawer")
+
     return (
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
