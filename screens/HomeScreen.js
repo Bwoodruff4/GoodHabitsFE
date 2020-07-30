@@ -1,6 +1,6 @@
-import React, {useState, useEffect } from 'react'
+import React, {useState, useEffect, useContext } from 'react'
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import NavBar from '../Components/NavBar'
+import { UserContext } from '../Components/userContext'
 import { 
     Container, 
     Header, 
@@ -15,10 +15,13 @@ import {
     const userURL = `http://10.0.2.2:3000/users/1`
 
 export default function HomeScreen({route, navigation, userID}) {
+    const { userInfo } = useContext(UserContext)
     // const { userID } = route.params
-    const [userInfo, setUserInfo] = useState({})
+    // const [userInfo, setUserInfo] = useState({})
     const [userHabits, setUserHabits] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+
+    console.log(userInfo, "homescreen")
 
     useEffect(() => { 
         setTimeout(() => {
@@ -27,7 +30,7 @@ export default function HomeScreen({route, navigation, userID}) {
         fetch(userURL)
         .then(response => response.json())
         .then(userInfo => {
-            setUserInfo(userInfo)
+            // setUserInfo(userInfo)
             setUserHabits(userInfo.habits)
         })
     }, [])
