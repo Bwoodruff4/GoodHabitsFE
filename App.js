@@ -31,8 +31,8 @@ const userURL = `http://10.0.2.2:3000/users/1`
 
 export default function App() {
   const [userInfo, setUserInfo] = useState({})
-
-
+  
+  const userValue = useMemo(() => ({userInfo, setUserInfo}), [userInfo, setUserInfo])
 
   const initialLoginState = {
     isLoading: true,
@@ -88,6 +88,7 @@ export default function App() {
             }
         })
       }).then(response => response.json())
+      setUserInfo(userData.user)
       let userToken = null
       if(userData.user != null && userData.user.username === username) {
         userToken = userData.jwt
@@ -147,13 +148,13 @@ export default function App() {
       </View>
     )
   }
-  console.log(loginState.userID, "app screen")
+
   return (
     <StyleProvider style={getTheme(material)}>
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
           {loginState.userToken !== null ? (
-            <UserContext.Provider>
+            <UserContext.Provider value={userValue}>
               <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props}/>} >
                 <Drawer.Screen name="Home" component={HomeStackScreen}/>
                 <Drawer.Screen name="Profile" component={ProfileStackScreen}/>
