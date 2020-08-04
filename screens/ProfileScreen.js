@@ -7,13 +7,10 @@ import {
     Icon,
 } from "native-base";
 
-export default function ProfileScreen({route, navigation}) {
-    const { userInfo } = route.params
-    const { getUserInfo } = route.params
-    console.log(userInfo, "Profile Screen")
+export default function ProfileScreen({navigation}) {
     return (
         <View style={styles.container}>
-            <Button block info rounded style={styles.button} onPress={() => navigation.navigate('NewHabitScreen',{userInfo: userInfo})}>
+            <Button block info rounded style={styles.button} onPress={() => navigation.navigate('NewHabitScreen')}>
                 <Icon right name='add' />
                 <Text>Add New Habit</Text>
             </Button>

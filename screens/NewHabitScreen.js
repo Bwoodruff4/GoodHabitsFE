@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { StyleSheet, View, TextInput } from 'react-native';
+import { UserContext } from '../Components/userContext'
 import {
     Content,
     Container,
@@ -14,16 +15,13 @@ import {
 
 const habitURL = `http://10.0.2.2:3000/habits`
 
-export default function NewHabitScreen({route,navigation}) {
-    const { userInfo } = route.params
+export default function NewHabitScreen({navigation}) {
+    const { userInfo } = useContext(UserContext)
     const [title, setTitle] = useState('')
     const [selectedValue, setSelectedValue] = useState(undefined)
-
-    console.log(userInfo, "New Habit Screen")
     
     const handleDropDownChange = (value) => {
         setSelectedValue(value)
-        console.log(value)
     }
     const handleTitleChange = (val) => {
         setTitle(val)

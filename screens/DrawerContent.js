@@ -14,8 +14,6 @@ const userURL = `http://10.0.2.2:3000/users/`
 
 export function DrawerContent(props) {
 
-    const { userID } = props
-
     const { signOut } = useContext(AuthContext)
 
     return (
@@ -28,7 +26,7 @@ export function DrawerContent(props) {
                         />
                     )}
                     label="Home"
-                    onPress={() => {props.navigation.navigate('Home', {screen: "Home", params: {userID: userID}})}}
+                    onPress={() => {props.navigation.navigate('Home', {screen: "Home"})}}
                 />
                 <DrawerItem 
                     icon={() => (
@@ -37,7 +35,7 @@ export function DrawerContent(props) {
                         />
                     )}
                     label="Profile"
-                    onPress={() => {props.navigation.navigate('Profile', {screen: "Profile", params: {userInfo: userInfo}})}}
+                    onPress={() => {props.navigation.navigate('Profile', {screen: "Profile"})}}
                 >
                 </DrawerItem>
                 <DrawerItem 
@@ -47,7 +45,7 @@ export function DrawerContent(props) {
                         />
                     )}
                     label="Habits"
-                    onPress={() => {props.navigation.navigate('Habits', {screen: "Habits", params: {userInfo: userInfo}})}}
+                    onPress={() => {props.navigation.navigate('Habits', {screen: "Habits"})}}
                 >
                 </DrawerItem>
             </DrawerContentScrollView>
