@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
 import {
     Button,
@@ -16,6 +16,7 @@ import {
     // CheckBox
 } from "native-base"
 import { CheckBox } from 'react-native-elements'
+import { UserContext } from '../Components/userContext'
 
 const habitURL = `http://10.0.2.2:3000/habits/`
 const userURL = `http://10.0.2.2:3000/users/`
@@ -23,7 +24,7 @@ const dayURL = `http://10.0.2.2:3000/days/`
 
 
 export default function HabitsScreen({route, navigation}) {
-    const { userInfo } = route.params
+    const { userInfo } = useContext(UserContext)
     // console.log(userInfo, "Habits Screen")
     const [habitList, setHabitList] = useState(userInfo.habits)
     const [selectedValue, setSelectedValue] = useState({})
@@ -39,7 +40,7 @@ export default function HabitsScreen({route, navigation}) {
     const updateUserHabits = () => {
         setTrackerSheet([])
         fetch(userURL + `${userInfo.id}`)
-        .then(response => response.json())
+        .then(response => response.json()) 
         .then(userHabits => setHabitList(userHabits.habits))
     }
 

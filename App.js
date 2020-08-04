@@ -36,7 +36,6 @@ export default function App() {
 
   const initialLoginState = {
     isLoading: true,
-    userID: null,
     userToken: null,
   }
 
@@ -51,21 +50,18 @@ export default function App() {
       case 'LOGIN':
         return {
           ...prevState,
-          userID: action.id,
           userToken: action.token,
           isLoading: false,
         }
       case 'LOGOUT':
         return {
           ...prevState,
-          userID: null,
           userToken: null,
           isLoading: false,
         }
       case 'REGISTER':
         return {
           ...prevState,
-          userID: action.id,
           userToken: action.token,
           isLoading: false,
         }
@@ -90,11 +86,10 @@ export default function App() {
       }).then(response => response.json())
       setUserInfo(userData.user)
       let userToken = null
-      if(userData.user != null && userData.user.username === username) {
+      if(userData.user) {
         userToken = userData.jwt
         try {
           await AsyncStorage.setItem('userToken', userToken)
-          // await AsyncStorage.setItem('userID', userData.user.id)
         } catch(error) {
           console.log(error)
         }
@@ -102,12 +97,11 @@ export default function App() {
       else {
         console.log(userData.message)
       }
-      dispatch({type: 'LOGIN', id: userData.user.id, token: userToken })
+      dispatch({type: 'LOGIN', token: userToken })
     },
     signOut: async() => {
       try {
         await AsyncStorage.removeItem('userToken')
-        // await AsyncStorage.removeItem('userID')
       } catch(error) {
         console.log(error)
       }
