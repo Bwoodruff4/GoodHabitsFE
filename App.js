@@ -16,6 +16,7 @@ import ProfileStackScreen from './screens/ProfileStackScreen'
 import RootStackScreen from './screens/RootStackScreen'
 import HabitsStackScreen from './screens/HabitsStackScreen'
 import NewHabitScreen from './screens/NewHabitScreen'
+import DeleteHabitScreen from './screens/DeleteHabitScreen'
 import { AuthContext } from './Components/context'
 import { isLoading } from 'expo-font';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -154,6 +155,7 @@ export default function App() {
                 <Drawer.Screen name="Profile" component={ProfileStackScreen}/>
                 <Drawer.Screen name="Habits" component={HabitsStackScreen}/>
                 <Drawer.Screen name="NewHabitScreen" component={NewHabitScreen}/>
+                <Drawer.Screen name="DeleteHabitScreen" component={DeleteHabitScreen}/>
               </Drawer.Navigator> 
             </UserContext.Provider>
           )
