@@ -13,7 +13,6 @@ import {
     CardItem,
     Right,
     Left,
-    // CheckBox
 } from "native-base"
 import { CheckBox } from 'react-native-elements'
 import { UserContext } from '../Components/userContext'
@@ -25,7 +24,6 @@ const dayURL = `http://10.0.2.2:3000/days/`
 
 export default function HabitsScreen({route, navigation}) {
     const { userInfo } = useContext(UserContext)
-    // console.log(userInfo, "Habits Screen")
     const [habitList, setHabitList] = useState(userInfo.habits)
     const [selectedValue, setSelectedValue] = useState({})
     const [trackerSheet, setTrackerSheet] = useState([])
@@ -56,7 +54,6 @@ export default function HabitsScreen({route, navigation}) {
         setIsLoading(true)
         setTimeout(() => {
             setSelectedValue(habit)
-            // getUserHabits(userURL)
             setIsLoading(false)
         },100)
     }

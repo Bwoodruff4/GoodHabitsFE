@@ -14,7 +14,7 @@ export default function ProfileScreen({navigation}) {
                 <Icon right name='add' />
                 <Text>Add New Habit</Text>
             </Button>
-            <Button block info rounded style={styles.button}>
+            <Button block info rounded style={styles.button} onPress={() => navigation.navigate('DeleteHabitScreen')}>
                 <Icon left name='trash' />
                 <Text>Delete Habit</Text>
             </Button>
